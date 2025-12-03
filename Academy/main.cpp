@@ -1,0 +1,201 @@
+#include <iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+
+//#define INHERITANCE
+
+class Human
+{
+protected:
+	std::string last_name;
+	std::string first_name;
+	int age;
+public:
+	//				get/set
+	const std::string& get_last_name()const
+	{
+		return last_name;
+	}
+	const std::string& get_first_name()const
+	{
+		return first_name;
+	}
+	int get_age()const
+	{
+		return age;
+	}
+	void set_last_name(const std::string& last_name)
+	{
+		this->last_name = last_name;
+	}
+	void set_first_name(const std::string& first_name)
+	{
+		this->first_name = first_name;
+	}
+	void set_age(int age)
+	{
+		this->age = age;
+	}
+	//				Constructors:
+	Human(const std::string& last_name, const std::string& first_name, int age)
+	{
+		set_last_name(last_name);
+		set_first_name(first_name);
+		set_age(age);
+		cout << "HConstructor:\t" << this << endl;
+	}
+	~Human()
+	{
+		cout << "HDestructor:\t" << this << endl;
+	}
+	virtual void info()const
+	{
+		cout << last_name << " " 
+			<< first_name << " " 
+			<< age << endl;
+	}
+};
+
+class AcademyMember :public Human
+{
+	std::string speciality;
+public:
+	const std::string& get_speciality()const
+	{
+		return speciality;
+	}
+	void set_speciality(const std::string& speciality)
+	{
+		this->speciality = speciality;
+	}
+	//			Constructors
+	AcademyMember(const std::string& last_name, const std::string& first_name, int age,
+		const std::string& speciality): Human(last_name,first_name,age)
+	{
+		set_speciality(speciality);
+		cout << "AMConstructor:\t" << this << endl;
+	}
+	~AcademyMember()
+	{
+		cout << "AMDestructor:\t" << this << endl;
+	}
+	//			Metods
+	void info()const
+	{
+		Human::info();
+		cout << speciality << endl;
+	}
+};
+
+class Student :public AcademyMember
+{
+	std::string group;
+	double rating;
+	double attendance;
+public:
+	const std::string& get_group()const
+	{
+		return group;
+	}
+	double get_rating()
+	{
+		return rating;
+	}
+	double get_attendance()
+	{
+		return attendance;
+	}
+	void set_group(const std::string& group)
+	{
+		this->group = group;
+	}
+	void set_rating(double rating)
+	{
+		this->rating = rating;
+	}
+	void set_attendence(double attendance)
+	{
+		this->attendance = attendance;
+	}
+
+	Student(const std::string& last_name, const std::string& first_name, 
+		int age,const std::string& speciality, const std::string& group, 
+		double rating, double attendance
+	): AcademyMember(last_name, first_name, age, speciality)
+	{
+		set_group(group);
+		set_rating(rating);
+		set_attendence(attendance);
+		cout << "SConstructor:\t" << this << endl;
+	}
+	~Student()
+	{
+		cout << "SDestructor:\t" << this << endl;
+	}
+	void info()
+	{
+		AcademyMember::info();
+		cout << group << " " << rating << " " << attendance << endl;
+	}
+};
+class Teacher :public AcademyMember
+{
+	int experience;
+public:
+	int get_experience()const
+	{
+		return experience;
+	}
+	void set_expirience(int experience)
+	{
+		this->experience = experience;
+	}
+	//				Constructor
+	Teacher(
+		const std::string& last_name, const std::string& first_name, int age,
+		const std::string& speciality, int experience
+	) : AcademyMember(last_name, first_name, age, speciality)
+	{
+		set_expirience(experience);
+		cout << "TConstructor:\t" << this << endl;
+	}
+	~Teacher()
+	{
+		cout << "TDestructor:\t" << this << endl;
+	}
+	//				Metods
+	void info()const
+	{
+		AcademyMember::info();
+		cout << experience << endl;
+	}
+};
+
+void main()
+{
+	setlocale(LC_ALL, "");
+#ifdef INHERITANCE
+	//Human Danil("Plekhov", "Danil", 15);
+	//Danil.info();
+	AcademyMember albert("Einstein", "Albert", 146,"Asreonomy");
+	albert.info();
+	Student Danil("Данил", "Плехов", 15, "Разработка ПО", "P-418", 100, 100);
+	Danil.info();
+	Teacher Albert("Einstein", "Albert", 146, "Astronomy", 120);
+	Albert.info();
+#endif
+
+	Human* group[] =
+	{
+		new Student("Кондратенко","Георгий", 18, "РПО", "P-418", 97, 98),
+		new Teacher("Stanne", "Michael",55,"Vocals",40),
+		new Student("Щербаков", "Илья", 15, "РПО", "P-418", 100, 99.9),
+		new Teacher("Henrikson","Martin", 50, "Bass", 40),
+		new Student("Татевосян", "Элеонора", 17,"РПО" ,"P-418", 98, 48)
+	};
+	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
+	{
+		group[i]->info();
+	}
+}
