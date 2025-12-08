@@ -3,6 +3,8 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+#define delimiter "\n----------------------------------------------------------\n"
+
 //#define INHERITANCE
 
 class Human
@@ -86,15 +88,21 @@ public:
 		cout << "AMDestructor:\t" << this << endl;
 	}
 	//			Metods
-	void info()const
+	void info()const override
 	{
 		Human::info();
 		cout << speciality << endl;
 	}
 };
+std::ostream& operator<<(std::ostream& os, const AcademyMember& obj)
+{
+	return os << obj.get_speciality();
+}
+
 
 class Student :public AcademyMember
 {
+protected:
 	std::string group;
 	double rating;
 	double attendance;
@@ -103,11 +111,11 @@ public:
 	{
 		return group;
 	}
-	double get_rating()
+	const double get_rating() const
 	{
 		return rating;
 	}
-	double get_attendance()
+	const double get_attendance() const
 	{
 		return attendance;
 	}
@@ -138,12 +146,18 @@ public:
 	{
 		cout << "SDestructor:\t" << this << endl;
 	}
-	void info()
+	void info()const override
 	{
 		AcademyMember::info();
 		cout << group << " " << rating << " " << attendance << endl;
 	}
 };
+std::ostream& operator<<(std::ostream& os, const Student& obj)
+{
+	return os << obj.get_group() << ", " << obj.get_rating() << ", " << obj.get_attendance();
+
+}
+
 class Teacher :public AcademyMember
 {
 	int experience;
@@ -170,14 +184,14 @@ public:
 		cout << "TDestructor:\t" << this << endl;
 	}
 	//				Metods
-	void info()const
+	void info()const override
 	{
 		AcademyMember::info();
 		cout << experience << endl;
 	}
 };
 
-class Graduate : public AcademyMember
+class Graduate : public Student
 {
 	std::string Diploma_colour;
 public:
@@ -189,8 +203,18 @@ public:
 	{
 		this->Diploma_colour = Diploma_colour;
 	}
-	Graduate(const std::string& last_name, const std::string& first_name, int age,
-		const std::string& speciality,const std::string& Diploma_colour) : AcademyMember(last_name, first_name, age, speciality)
+	Graduate
+	(
+		const std::string& last_name, const std::string& first_name,int age,
+		const std::string& speciality, 
+		const std::string& group,double rating, double attendance,
+		const std::string& Diploma_colour
+	): Student
+	(
+		last_name,first_name,age, 
+		speciality, 
+		group,rating, attendance
+	)
 	{
 		set_Diploma_colour(Diploma_colour);
 		cout << "GConstructor:\t" << this << endl;
@@ -199,12 +223,11 @@ public:
 	{
 		cout << "GDestructor:\t" << this << endl;
 	}
-	void info()const
+	void info()const override
 	{
-		AcademyMember::info();
+		Student::info();
 		cout << Diploma_colour << endl;
 	}
-
 };
 
 void main()
@@ -227,15 +250,15 @@ void main()
 		new Teacher("Stanne", "Michael",55,"Vocals",40),
 		new Student("Щербаков", "Илья", 15, "РПО", "P-418", 100, 99.9),
 		new Teacher("Henrikson","Martin", 50, "Bass", 40),
-		new Student("Татевосян", "Элеонора", 17,"РПО" ,"P-418", 98, 48)
+		new Student("Татевосян", "Элеонора", 17,"РПО" ,"P-418", 98, 48),
+		new Graduate("Plekhov", "Danil", 15, "РПО","P-418",98,100,"Red")
 	};
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
-		//group[i]->info();
-		cout << *group[i] << endl;
+		group[i]->info();
+		//cout << *group[i] << endl;
+		cout << delimiter << endl;
 	}
-	Graduate I("Plekhov", "Danil", 15, "РПО", "Red");
-	I.info();
 }
 
 
