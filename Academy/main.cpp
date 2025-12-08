@@ -56,6 +56,11 @@ public:
 			<< age << endl;
 	}
 };
+std::ostream& operator<<(std::ostream& os, const Human& obj)
+{
+	return os << obj.get_first_name() << "," << obj.get_last_name() << "," << obj.get_age();
+
+}
 
 class AcademyMember :public Human
 {
@@ -172,6 +177,36 @@ public:
 	}
 };
 
+class Graduate : public AcademyMember
+{
+	std::string Diploma_colour;
+public:
+	const std::string& get_Diploma_colour()const
+	{
+		return Diploma_colour;
+	}
+	void set_Diploma_colour(const std::string& Diploma_colour)
+	{
+		this->Diploma_colour = Diploma_colour;
+	}
+	Graduate(const std::string& last_name, const std::string& first_name, int age,
+		const std::string& speciality,const std::string& Diploma_colour) : AcademyMember(last_name, first_name, age, speciality)
+	{
+		set_Diploma_colour(Diploma_colour);
+		cout << "GConstructor:\t" << this << endl;
+	}
+	~Graduate()
+	{
+		cout << "GDestructor:\t" << this << endl;
+	}
+	void info()const
+	{
+		AcademyMember::info();
+		cout << Diploma_colour << endl;
+	}
+
+};
+
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -196,6 +231,11 @@ void main()
 	};
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
-		group[i]->info();
+		//group[i]->info();
+		cout << *group[i] << endl;
 	}
+	Graduate I("Plekhov", "Danil", 15, "пон", "Red");
+	I.info();
 }
+
+
