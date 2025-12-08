@@ -47,6 +47,13 @@ public:
 		set_age(age);
 		cout << "HConstructor:\t" << this << endl;
 	}
+	Human(const Human& other)
+	{
+		this->last_name = other.last_name;
+		this->first_name = other.first_name;
+		this->age = other.age;
+		cout << "HCopyConstructor: " << this << endl;
+	}
 	~Human()
 	{
 		cout << "HDestructor:\t" << this << endl;
@@ -60,7 +67,7 @@ public:
 };
 std::ostream& operator<<(std::ostream& os, const Human& obj)
 {
-	return os << obj.get_first_name() << "," << obj.get_last_name() << "," << obj.get_age();
+	return os << obj.get_last_name() << ", " << obj.get_first_name() << ", " << obj.get_age();
 
 }
 
@@ -96,7 +103,7 @@ public:
 };
 std::ostream& operator<<(std::ostream& os, const AcademyMember& obj)
 {
-	return os << obj.get_speciality();
+	return os << (Human&)obj<<" " << obj.get_speciality();
 }
 
 
@@ -190,6 +197,11 @@ public:
 		cout << experience << endl;
 	}
 };
+std::ostream& operator<<(std::ostream& os, const Teacher& obj)
+{
+	return os << obj.get_experience();
+
+}
 
 class Graduate : public Student
 {
@@ -229,6 +241,11 @@ public:
 		cout << Diploma_colour << endl;
 	}
 };
+std::ostream& operator<<(std::ostream& os, const Graduate& obj)
+{
+	return os << obj.get_Diploma_colour();
+
+}
 
 void main()
 {
@@ -255,8 +272,8 @@ void main()
 	};
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
-		group[i]->info();
-		//cout << *group[i] << endl;
+		//group[i]->info();
+		cout << *dynamic_cast<AcademyMember*>(group[i]) << endl;
 		cout << delimiter << endl;
 	}
 }
