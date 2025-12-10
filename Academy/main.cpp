@@ -273,8 +273,13 @@ void main()
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
 		//group[i]->info();
-		cout << *dynamic_cast<AcademyMember*>(group[i]) << endl;
 		cout << delimiter << endl;
+		cout << *dynamic_cast<AcademyMember*>(group[i])<<", ";
+		if (typeid(*group[i])==typeid(Student))cout << *dynamic_cast<Student*>(group[i]) << endl;
+		if (typeid(*group[i])==typeid(Teacher))cout << *dynamic_cast<Teacher*>(group[i]) << endl;
+		if (typeid(*group[i])==typeid(Graduate))cout << *dynamic_cast<Student*>(group[i]) <<", " << *dynamic_cast<Graduate*>(group[i]) << endl;
+		
+
 	}
 }
 
