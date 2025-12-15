@@ -55,7 +55,7 @@ public:
 	{
 		return os << last_name << " " 
 			<< first_name << " " 
-			<< age << endl;
+			<< age;
 	}
 };
 std::ostream& operator<<(std::ostream& os, const Human& obj)
@@ -90,8 +90,7 @@ public:
 	//			Metods
 	std::ostream& info(std::ostream& os)const override
 	{
-		Human::info(os);
-		return os << speciality << endl;
+		return Human::info(os) << " " << speciality;
 	}
 };
 std::ostream& operator<<(std::ostream& os, const AcademyMember& obj)
@@ -149,7 +148,7 @@ public:
 	std::ostream& info(std::ostream& os)const override
 	{
 		AcademyMember::info(os);
-		return os << group << " " << rating << " " << attendance << endl;
+		return os << group << " " << rating << " " << attendance << " ";
 	}
 };
 std::ostream& operator<<(std::ostream& os, const Student& obj)
