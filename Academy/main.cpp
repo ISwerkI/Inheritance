@@ -10,11 +10,19 @@ using std::endl;
 class Human
 {
 protected:
+	static const int LAST_NAME_WIDTH = 12;
+	static const int FIRST_NAME_WIDTH = 12;
+	static const int AGE_WIDTH = 3;
+	static int count;
 	std::string last_name;
 	std::string first_name;
 	int age;
 public:
 	//				get/set
+	static int get_count()
+	{
+		return count;
+	}
 	const std::string& get_last_name()const
 	{
 		return last_name;
@@ -45,19 +53,27 @@ public:
 		set_last_name(last_name);
 		set_first_name(first_name);
 		set_age(age);
+		count++;
 		cout << "HConstructor:\t" << this << endl;
 	}
 	~Human()
 	{
+		count--;
 		cout << "HDestructor:\t" << this << endl;
 	}
 	virtual std::ostream& info(std::ostream& os)const
 	{
-		return os << last_name << " " 
-			<< first_name << " " 
-			<< age;
+		os.width(LAST_NAME_WIDTH);
+		os << std::left;
+		os << last_name;
+		os.width(FIRST_NAME_WIDTH);
+		os << first_name;
+		os.width(AGE_WIDTH);
+		os << age;
+		return os;
 	}
 };
+int Human::count = 0;
 std::ostream& operator<<(std::ostream& os, const Human& obj)
 {
 	//return os << obj.get_first_name() << "," << obj.get_last_name() << "," << obj.get_age();
@@ -66,6 +82,7 @@ std::ostream& operator<<(std::ostream& os, const Human& obj)
 
 class AcademyMember :public Human
 {
+	static const int SPECIALITY_WIDTH = 16;
 	std::string speciality;
 public:
 	const std::string& get_speciality()const
@@ -90,7 +107,10 @@ public:
 	//			Metods
 	std::ostream& info(std::ostream& os)const override
 	{
-		return Human::info(os) << " " << speciality;
+		return Human::info(os);
+		os.width(SPECIALITY_WIDTH);
+		os << speciality;
+		return os;
 	}
 };
 std::ostream& operator<<(std::ostream& os, const AcademyMember& obj)
@@ -102,6 +122,9 @@ std::ostream& operator<<(std::ostream& os, const AcademyMember& obj)
 class Student :public AcademyMember
 {
 protected:
+	static const int GROUP_WIDTH = 8;
+	static const int RATING_WIDTH = 8;
+	static const int ATTENDANCE_WIDTH = 8;
 	std::string group;
 	double rating;
 	double attendance;
@@ -148,7 +171,13 @@ public:
 	std::ostream& info(std::ostream& os)const override
 	{
 		AcademyMember::info(os);
-		return os << group << " " << rating << " " << attendance << " ";
+		os.width(GROUP_WIDTH);
+		os << group;
+		os.width(RATING_WIDTH);
+		os << rating;
+		os.width(ATTENDANCE_WIDTH);
+		os << attendance;
+		return os;
 	}
 };
 std::ostream& operator<<(std::ostream& os, const Student& obj)
@@ -256,8 +285,8 @@ void main()
 	{
 		//group[i]->info();
 		cout << *group[i] << endl;
-		cout << delimiter << endl;
 	}
+	cout << "Количество участников: " << Human::get_count();
 }
 
 
