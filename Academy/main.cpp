@@ -51,17 +51,17 @@ public:
 	{
 		cout << "HDestructor:\t" << this << endl;
 	}
-	virtual void info()const
+	virtual std::ostream& info(std::ostream& os)const
 	{
-		cout << last_name << " " 
+		return os << last_name << " " 
 			<< first_name << " " 
 			<< age << endl;
 	}
 };
 std::ostream& operator<<(std::ostream& os, const Human& obj)
 {
-	return os << obj.get_first_name() << "," << obj.get_last_name() << "," << obj.get_age();
-
+	//return os << obj.get_first_name() << "," << obj.get_last_name() << "," << obj.get_age();
+	return obj.info(os);
 }
 
 class AcademyMember :public Human
@@ -88,10 +88,10 @@ public:
 		cout << "AMDestructor:\t" << this << endl;
 	}
 	//			Metods
-	void info()const override
+	std::ostream& info(std::ostream& os)const override
 	{
-		Human::info();
-		cout << speciality << endl;
+		Human::info(os);
+		return os << speciality << endl;
 	}
 };
 std::ostream& operator<<(std::ostream& os, const AcademyMember& obj)
@@ -146,10 +146,10 @@ public:
 	{
 		cout << "SDestructor:\t" << this << endl;
 	}
-	void info()const override
+	std::ostream& info(std::ostream& os)const override
 	{
-		AcademyMember::info();
-		cout << group << " " << rating << " " << attendance << endl;
+		AcademyMember::info(os);
+		return os << group << " " << rating << " " << attendance << endl;
 	}
 };
 std::ostream& operator<<(std::ostream& os, const Student& obj)
@@ -184,10 +184,10 @@ public:
 		cout << "TDestructor:\t" << this << endl;
 	}
 	//				Metods
-	void info()const override
+	std::ostream& info(std::ostream& os)const override
 	{
-		AcademyMember::info();
-		cout << experience << endl;
+		AcademyMember::info(os);
+		return os << experience << endl;
 	}
 };
 
@@ -223,10 +223,10 @@ public:
 	{
 		cout << "GDestructor:\t" << this << endl;
 	}
-	void info()const override
+	std::ostream& info(std::ostream& os)const override
 	{
-		Student::info();
-		cout << Diploma_colour << endl;
+		Student::info(os);
+		return os << Diploma_colour << endl;
 	}
 };
 
@@ -255,8 +255,8 @@ void main()
 	};
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
-		group[i]->info();
-		//cout << *group[i] << endl;
+		//group[i]->info();
+		cout << *group[i] << endl;
 		cout << delimiter << endl;
 	}
 }
