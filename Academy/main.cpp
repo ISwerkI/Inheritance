@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -287,6 +288,17 @@ void main()
 		cout << *group[i] << endl;
 	}
 	cout << "Количество участников: " << Human::get_count();
+	int const SIZE = 1024 * 64;
+	char Student[SIZE] = {};
+	char Teacher[SIZE] = {};
+	std::ofstream fout("Group.txt");
+	for(int i = 0; i< Human::get_count();i++)
+	{
+		fout << *group[i] << endl;
+	}
+	std::ifstream fin("Group.txt");
+	fin.close();
+	fout.close();
 }
 
 
