@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include<string>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -7,6 +8,7 @@ using std::endl;
 #define delimiter "\n----------------------------------------------------------\n"
 
 //#define INHERITANCE
+//#define POLYMORPHISM
 
 class Human
 {
@@ -57,21 +59,34 @@ public:
 		count++;
 		cout << "HConstructor:\t" << this << endl;
 	}
-	~Human()
+	virtual ~Human()
 	{
 		count--;
 		cout << "HDestructor:\t" << this << endl;
 	}
 	virtual std::ostream& info(std::ostream& os)const
 	{
-		os.width(LAST_NAME_WIDTH);
+		os.width(11);
 		os << std::left;
+		os << std::string(typeid(*this).name()+6) + ":"; 
+		os.width(LAST_NAME_WIDTH);
 		os << last_name;
 		os.width(FIRST_NAME_WIDTH);
 		os << first_name;
 		os.width(AGE_WIDTH);
 		os << age;
 		return os;
+	}
+	virtual std::ofstream& write(std::ofstream& ofs)const
+	{
+		ofs << typeid(*this).name() + 6 << ":";
+		ofs << last_name << " " << first_name << " " << age;
+		return ofs;
+	}
+	virtual std::ifstream& read(std::ifstream& ifs)
+	{
+		ifs >> last_name >> first_name >> age;
+		return ifs;
 	}
 };
 int Human::count = 0;
@@ -80,6 +95,17 @@ std::ostream& operator<<(std::ostream& os, const Human& obj)
 	//return os << obj.get_first_name() << "," << obj.get_last_name() << "," << obj.get_age();
 	return obj.info(os);
 }
+std::ifstream& operator>>(std::ifstream& ifs, Human& obj)
+{
+	obj.read(ifs);
+	return ifs;
+}
+/*std::ofstream& operator<<(std::ofstream& ofs, const Human& obj)
+{
+	obj.write(ofs);
+	return ofs;
+}
+*/
 
 class AcademyMember :public Human
 {
@@ -112,6 +138,12 @@ public:
 		os.width(SPECIALITY_WIDTH);
 		os << speciality;
 		return os;
+	}
+	std::ofstream& write(std::ofstream& ofs)const override
+	{
+		Human::write(ofs);
+		ofs << " " << speciality;
+		return ofs;
 	}
 };
 std::ostream& operator<<(std::ostream& os, const AcademyMember& obj)
@@ -165,7 +197,7 @@ public:
 		set_attendence(attendance);
 		cout << "SConstructor:\t" << this << endl;
 	}
-	~Student()
+	virtual ~Student()
 	{
 		cout << "SDestructor:\t" << this << endl;
 	}
@@ -179,6 +211,12 @@ public:
 		os.width(ATTENDANCE_WIDTH);
 		os << attendance;
 		return os;
+	}
+	std::ofstream& write(std::ofstream& ofs)const override
+	{
+		AcademyMember::write(ofs);
+		ofs << " " << group << " " << rating << " " << attendance;
+		return ofs;
 	}
 };
 std::ostream& operator<<(std::ostream& os, const Student& obj)
@@ -208,7 +246,7 @@ public:
 		set_expirience(experience);
 		cout << "TConstructor:\t" << this << endl;
 	}
-	~Teacher()
+	virtual ~Teacher()
 	{
 		cout << "TDestructor:\t" << this << endl;
 	}
@@ -217,6 +255,12 @@ public:
 	{
 		AcademyMember::info(os);
 		return os << experience << endl;
+	}
+	std::ofstream& write(std::ofstream& ofs)const override
+	{
+		AcademyMember::write(ofs);
+		ofs << " " << experience;
+		return ofs;
 	}
 };
 
@@ -248,7 +292,7 @@ public:
 		set_Diploma_colour(Diploma_colour);
 		cout << "GConstructor:\t" << this << endl;
 	}
-	~Graduate()
+	virtual ~Graduate()
 	{
 		cout << "GDestructor:\t" << this << endl;
 	}
@@ -257,7 +301,56 @@ public:
 		Student::info(os);
 		return os << Diploma_colour << endl;
 	}
+	std::ofstream& write(std::ofstream& ofs)const override
+	{
+		AcademyMember::write(ofs);
+		ofs << " " << Diploma_colour;
+		return ofs;
+	}
 };
+
+void Print(Human* group[], const int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		//group[i]->info();
+		cout << *group[i] << endl;
+	}
+}
+void Save(Human* group[], const int n, const std::string& filename)
+{
+	std::ofstream fout(filename);
+	for (int i = 0; i < n; i++)
+	{
+		fout << *group[i] << endl;
+	}
+	fout.close();
+	std::string cmd = "notepad ";
+	cmd += filename;
+	system(cmd.c_str());
+}
+
+Human** Load(std::string filename, int& n)
+{
+	Human** group = nullptr;
+	std::ifstream fin(filename);
+	if (fin.is_open())
+	{
+		n = 0;
+		std::string buffer;
+		for (;!fin.eof(); n++)
+		{
+			std::getline(fin, buffer);
+		}
+		cout << n << endl;
+	}
+	else
+	{
+		std::cerr << "Error: file not found" << endl;
+	}
+	fin.close();
+	return group;
+}
 
 void main()
 {
@@ -273,32 +366,27 @@ void main()
 	Albert.info();
 #endif
 
+#ifdef POLYMORPHISM
+
+
 	Human* group[] =
 	{
 		new Student("Кондратенко","Георгий", 18, "РПО", "P-418", 97, 98),
 		new Teacher("Stanne", "Michael",55,"Vocals",40),
 		new Student("Щербаков", "Илья", 15, "РПО", "P-418", 100, 99.9),
-		new Teacher("Henrikson","Martin", 50, "Bass", 40),
+		new Teacher("Henrikson","Martin", 50, "Bass guitar", 40),
 		new Student("Татевосян", "Элеонора", 17,"РПО" ,"P-418", 98, 48),
 		new Graduate("Plekhov", "Danil", 15, "РПО","P-418",98,100,"Red")
 	};
-	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
-	{
-		//group[i]->info();
-		cout << *group[i] << endl;
-	}
-	cout << "Количество участников: " << Human::get_count();
-	int const SIZE = 1024 * 64;
-	char Student[SIZE] = {};
-	char Teacher[SIZE] = {};
-	std::ofstream fout("Group.txt");
-	for(int i = 0; i< Human::get_count();i++)
-	{
-		fout << *group[i] << endl;
-	}
+	Print(group, sizeof(group) / sizeof(group[0]));
+	cout << "Количество участников: " << Human::get_count() << endl;
+	Save(group, sizeof(group) / sizeof(group[0]), "P_418.txt");
+	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++) delete group[i];
 	std::ifstream fin("Group.txt");
 	fin.close();
-	fout.close();
+	system("start notepad Group.txt");
+#endif // POLYMORPHISM
+
 }
 
 
