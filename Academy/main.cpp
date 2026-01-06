@@ -329,7 +329,14 @@ void Save(Human* group[], const int n, const std::string& filename)
 	cmd += filename;
 	system(cmd.c_str());
 }
-
+Human* Factory(const char type[])
+{
+	Human* human = nullptr;
+	if (strstr(type, "Student"))human = new Student("", "", 0, "", "", 0, 0);
+	if (strstr(type, "Graduate"))human = new Graduate("", "", 0, "", "", 0, 0,"");
+	if (strstr(type, "Teacher"))human = new Teacher("", "", 0, "" , 0);
+	return human;
+}
 Human** Load(std::string filename, int& n)
 {
 	Human** group = nullptr;
@@ -338,11 +345,24 @@ Human** Load(std::string filename, int& n)
 	{
 		n = 0;
 		std::string buffer;
-		for (;!fin.eof(); n++)
+		while(!fin.eof())
 		{
 			std::getline(fin, buffer);
+			if (buffer.size() == 0)continue;
+			n++;
 		}
 		cout << n << endl;
+		group = new Human * [n] {};
+		cout << fin.tellg() << endl;
+		fin.clear(0);
+		fin.seekg(0);
+		cout << fin.tellg() << endl;
+		for (int i = 0; !fin.eof(); i++)
+		{
+			std::getline(fin, buffer, ':');
+			if (buffer.size() == 0)continue;
+			group[i] = Factory(buffer.c_str());
+		}
 	}
 	else
 	{
@@ -387,6 +407,9 @@ void main()
 	system("start notepad Group.txt");
 #endif // POLYMORPHISM
 
+	int n = 0;
+	Human** group = Load("P_418.txt", n);
+	Print(group, n);
 }
 
 
