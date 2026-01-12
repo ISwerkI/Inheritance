@@ -145,6 +145,18 @@ public:
 		ofs << " " << speciality;
 		return ofs;
 	}
+	std::ifstream& read(std::ifstream& ifs)override
+	{
+		Human::read(ifs);
+		char buffer[SPECIALITY_WIDTH + 1] = {};
+		ifs.read(buffer, SPECIALITY_WIDTH);
+		cout << buffer << endl;
+		for (int i = SPECIALITY_WIDTH - 1; buffer[i] == ' '; i--) buffer[i] = 0;		
+		while (buffer[0] == ' ')
+			for (int i = 0; buffer[i]; i++)buffer[i] = buffer[i + 1];
+		this->speciality = buffer;
+		return ifs;
+	}
 };
 std::ostream& operator<<(std::ostream& os, const AcademyMember& obj)
 {
@@ -218,6 +230,12 @@ public:
 		ofs << " " << group << " " << rating << " " << attendance;
 		return ofs;
 	}
+	std::ifstream& read(std::ifstream& ifs)override
+	{
+		AcademyMember::read(ifs);
+		ifs >> group >> rating >> attendance;
+		return ifs;
+	}
 };
 std::ostream& operator<<(std::ostream& os, const Student& obj)
 {
@@ -261,6 +279,12 @@ public:
 		AcademyMember::write(ofs);
 		ofs << " " << experience;
 		return ofs;
+	}
+	std::ifstream& read(std::ifstream& ifs)override
+	{
+		AcademyMember::read(ifs);
+		ifs >> experience;
+		return ifs;
 	}
 };
 
@@ -306,6 +330,12 @@ public:
 		AcademyMember::write(ofs);
 		ofs << " " << Diploma_colour;
 		return ofs;
+	}
+	std::ifstream& read(std::ifstream& ifs)
+	{
+		Student::read(ifs);
+		std::getline(ifs, Diploma_colour);
+		return ifs;
 	}
 };
 
@@ -362,6 +392,8 @@ Human** Load(std::string filename, int& n)
 			std::getline(fin, buffer, ':');
 			if (buffer.size() == 0)continue;
 			group[i] = Factory(buffer.c_str());
+			if (group[i])fin >> *group[i];
+			else i--;
 		}
 	}
 	else

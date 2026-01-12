@@ -1,9 +1,9 @@
-Student:   Кондратенко Георгий     18 P-418   97      98      
+Student:                           18 P-418   97      98      
 Teacher:   Stanne      Michael     55 40
 
-Student:   Щербаков    Илья        15 P-418   100     99.9    
+Student:                           15 P-418   100     99.9    
 Teacher:   Henrikson   Martin      50 40
 
-Student:   Татевосян   Элеонора    17 P-418   98      48      
+Student:                           17 P-418   98      48      
 Graduate:  Plekhov     Danil       15 P-418   98      100     Red
 
