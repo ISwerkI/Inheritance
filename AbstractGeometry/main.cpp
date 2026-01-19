@@ -24,6 +24,9 @@ class Shape
 	static const int MAX_START_Y = 700;
 	static const int MIN_LINE_WIDTH = 1;
 	static const int MAX_LINE_WIDTH = 32;
+	static const int MIN_SIZE= 20;
+	static const int MAX_SIZE = 500;
+
 protected:
 	Color color;
 	int start_x;
@@ -44,21 +47,41 @@ public:
 	}
 	void set_start_x(int start_x)
 	{
-		if (start_x < MIN_START_X)start_x = MIN_START_X;
-		if (start_x > MAX_START_X)start_x = MAX_START_X;
-		this->start_x = start_x;
+		//if (start_x > MAX_START_X)start_x = MAX_START_X;
+		//if (start_x < MIN_START_X)start_x = MIN_START_X;
+		//this->start_x = start_x;
+		this->start_x =
+			start_x < MIN_START_X ? MIN_START_X :
+			start_x > MAX_START_X ? MAX_START_X :
+			start_x;
 	}
 	void set_start_y(int start_y)
 	{
-		if (start_y < MIN_START_Y)start_y = MIN_START_Y;
-		if (MAX_START_Y > 1000)start_y = MAX_START_Y;
-		this->start_y = start_y;
+		//if (start_y < MIN_START_Y)start_y = MIN_START_Y;
+		//if (MAX_START_Y > 1000)start_y = MAX_START_Y;
+		//this->start_y = start_y;
+		this->start_y =
+			start_y < MIN_START_Y ? MIN_START_Y :
+			start_y > MAX_START_Y ? MAX_START_Y :
+			start_y;
 	}
 	void set_line_width(int line_width)
 	{
-		if (line_width < MIN_LINE_WIDTH)line_width = MIN_LINE_WIDTH;
-		if (line_width > MAX_LINE_WIDTH)line_width = MAX_LINE_WIDTH;
-		this->line_width = line_width;
+		//if (line_width < MIN_LINE_WIDTH)line_width = MIN_LINE_WIDTH;
+		//if (line_width > MAX_LINE_WIDTH)line_width = MAX_LINE_WIDTH;
+		//this->line_width = line_width;
+		this->line_width =
+			line_width < MIN_LINE_WIDTH ? MIN_LINE_WIDTH :
+			line_width < MAX_LINE_WIDTH ? MAX_LINE_WIDTH :
+			line_width;
+			
+	}
+	double filter_size(double size)
+	{
+		return
+			size<MIN_SIZE ? MIN_SIZE :
+			size > MAX_SIZE ? MAX_SIZE :
+			size;
 	}
 	Shape(SHAPE_TAKE_PARAMETERS) :color(color)
 	{
@@ -199,6 +222,8 @@ public:
 	}
 
 };
+
+
 void main()
 {
 	setlocale(LC_ALL, "");
