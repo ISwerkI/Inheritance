@@ -294,7 +294,7 @@ namespace Geometry
 		{
 			set_radius(radius);
 		}
-		~Circle(){}
+		~Circle() {}
 		double get_area()const override
 		{
 			return M_PI * radius * radius;
@@ -323,8 +323,8 @@ namespace Geometry
 	class Triangle :public Shape
 	{
 	public:
-		Triangle(SHAPE_TAKE_PARAMETERS) :Shape(SHAPE_GIVE_PARAMETERS){}
-		~Triangle(){}
+		Triangle(SHAPE_TAKE_PARAMETERS) :Shape(SHAPE_GIVE_PARAMETERS) {}
+		~Triangle() {}
 		virtual double get_height()const = 0;
 	};
 	class EquilateralTriangle :public Triangle
@@ -343,7 +343,7 @@ namespace Geometry
 		{
 			set_side(side);
 		}
-		~EquilateralTriangle(){}
+		~EquilateralTriangle() {}
 		double get_height()const override
 		{
 			return sqrt(pow(side, 2) - pow(side / 2, 2));
@@ -360,10 +360,80 @@ namespace Geometry
 		{
 			HWND hwnd = GetConsoleWindow();
 			HDC hdc = GetDC(hwnd);
-			HPEN hPen = CreatePen(PS_SOLID,line_width,color);
+			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
 			HBRUSH hBrush = CreateSolidBrush(color);
 			SelectObject(hdc, hPen);
-			SelectObject(hdc,hPen);
+			SelectObject(hdc, hBrush);
+
+			POINT vertices[] =
+			{
+				{start_x + (int)side / 2, start_y},
+				{start_x + side,start_y + get_height()},
+				{start_x,start_y + get_height()},
+			};
+			Polygon(hdc,vertices,3); //vertices - массив углов фигуры, 3 - количество углов(количество элементов массива)
+
+			DeleteObject(hBrush);
+			DeleteObject(hPen);
+			ReleaseDC(hwnd, hdc);
+
+		}
+	};
+	class IsoscelesTriangle :public Triangle
+	{
+		double base;
+		double side;
+	public:
+		double get_base()const
+		{
+			return base;
+		}
+		double get_side()const
+		{
+			return side;
+		}
+		void set_base(double base)
+		{
+			this->base = filter_size(base);
+		}
+		void set_side(double side)
+		{
+			this->side = filter_size(side);
+		}
+		IsoscelesTriangle(double base, double side, SHAPE_TAKE_PARAMETERS) :Triangle(SHAPE_GIVE_PARAMETERS)
+		{
+			set_base(base);
+			set_side(side);
+		}
+		~IsoscelesTriangle(){}
+		double get_height()const override
+		{
+			return sqrt(pow(side, 2) - pow(base / 2, 2));
+		}
+		double get_area()const override
+		{
+			return base / 2 * get_height();
+		}
+		double get_perimeter()const override
+		{
+			return base + 2 * side;
+		}
+		void draw()const override
+		{
+			HWND hwnd = GetConsoleWindow();
+			HDC hdc = GetDC(hwnd);
+			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
+			HBRUSH hBrush = CreateSolidBrush(color);
+			SelectObject(hdc, hPen);
+			SelectObject(hdc, hBrush);
+
+			POINT vertices[] =
+			{
+				{start_x + base / 2,start_y},
+				{start_x + base,start_y + get_height()},
+				{start_x,start_y + get_height()},
+			};
+			Polygon(hdc, vertices, 3);
 
 			DeleteObject(hBrush);
 			DeleteObject(hPen);
@@ -374,16 +444,19 @@ namespace Geometry
 
 void main()
 {
-	//setlocale(LC_ALL, "");
+	setlocale(LC_ALL, "");
 	//Geometry::Square square(-300, -300, 300, 1, Geometry::Color::White);
 	//square.info();
 
 	//Geometry::Rectangle rect(200, 100, 500, 100, 5, Geometry::Color::Red);
 	//rect.info();
 
-	Geometry::Circle circle(50, 700, 300, 5, Geometry::Color::Yellow);
-	circle.info();
+	//Geometry::Circle circle(50, 700, 300, 5, Geometry::Color::Yellow);
+	//circle.info();
 
-	Geometry::EquilateralTriangle e_triangle(80, 500, 500, 32, Geometry::Color::Green);
-	e_triangle.info();
+	//Geometry::EquilateralTriangle e_triangle(180, 500, 200, 32, Geometry::Color::Green);
+	//e_triangle.info();
+
+	Geometry::IsoscelesTriangle iso_triangle(100, 180, 700, 400, 32, Geometry::Color::Violet);
+	iso_triangle.info();
 }
