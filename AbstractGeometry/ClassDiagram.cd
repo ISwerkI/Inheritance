@@ -3,7 +3,7 @@
   <Class Name="Geometry::Shape" Collapsed="true">
     <Position X="3.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAUAAAADAAAgQIAABIAAAEFYABAAAyAQAAAAiAAIAA=</HashCode>
+      <HashCode>AAAUAAEADAAAgQIAABIAAAEFYABAAAyAQAAAAiAAIAA=</HashCode>
       <FileName>main.cpp</FileName>
     </TypeIdentifier>
   </Class>
@@ -38,7 +38,7 @@
   <Enum Name="Geometry::Color" Collapsed="true">
     <Position X="9.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAGAAAAAAAAAgAAAAAAAAAAFAAAAAAAAAAAADAAAAA=</HashCode>
+      <HashCode>AAAGAAAAAAAAAhAAAAAAAAAAFAAAAAAAAAAAADAAAAA=</HashCode>
       <FileName>main.cpp</FileName>
     </TypeIdentifier>
   </Enum>
