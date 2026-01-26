@@ -17,8 +17,8 @@ namespace Geometry
 		Orange = 0x00006CFF
 	};
 
-#define SHAPE_TAKE_PARAMETERS int start_x, int start_y, int line_width, Color color
-#define SHAPE_GIVE_PARAMETERS start_x, start_y, line_width, color
+#define SHAPE_TAKE_PARAMETERS int start_x, int start_y, int line_width, Color color, Color fill_color = Color::Black
+#define SHAPE_GIVE_PARAMETERS start_x, start_y, line_width, color, fill_color
 
 	class Shape
 	{
@@ -33,6 +33,7 @@ namespace Geometry
 
 	protected:
 		Color color;
+		Color fill_color;
 		int start_x;
 		int start_y;
 		int line_width;
@@ -87,7 +88,7 @@ namespace Geometry
 				size > MAX_SIZE ? MAX_SIZE :
 				size;
 		}
-		Shape(SHAPE_TAKE_PARAMETERS) :color(color)
+		Shape(SHAPE_TAKE_PARAMETERS) :color(color),fill_color(fill_color)
 		{
 			set_start_x(start_x);
 			set_start_y(start_y);
@@ -156,7 +157,7 @@ namespace Geometry
 			HDC hdc = GetDC(hwnd);
 			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
 			HPEN hPen_complimentary = CreatePen(PS_SOLID, 5, complimentary(color));
-			HBRUSH hBrush = CreateSolidBrush(color);
+			HBRUSH hBrush = CreateSolidBrush(fill_color);
 			SelectObject(hdc, hPen);
 			SelectObject(hdc, hBrush);
 			SelectObject(hdc, hPen_complimentary);
@@ -282,7 +283,7 @@ namespace Geometry
 			HDC hdc = GetDC(hwnd);
 			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
 			HPEN hPen_complimentary = CreatePen(PS_SOLID, 5, complimentary(color));
-			HBRUSH hBrush = CreateSolidBrush(color);
+			HBRUSH hBrush = CreateSolidBrush(fill_color);
 			SelectObject(hdc, hPen);
 			SelectObject(hdc, hBrush);
 			SelectObject(hdc, hPen_complimentary);
@@ -328,7 +329,7 @@ namespace Geometry
 			HDC hdc = GetDC(hwnd);
 			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
 			HPEN hPen_complimentary = CreatePen(PS_SOLID, 5, complimentary(color));
-			HBRUSH hBrush = CreateSolidBrush(color);
+			HBRUSH hBrush = CreateSolidBrush(fill_color);
 			SelectObject(hdc, hPen);
 			SelectObject(hdc, hBrush);
 			SelectObject(hdc, hPen_complimentary);
@@ -386,7 +387,7 @@ namespace Geometry
 			HDC hdc = GetDC(hwnd);
 			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
 			HPEN hPen_complimentary = CreatePen(PS_SOLID, 5, complimentary(color));
-			HBRUSH hBrush = CreateSolidBrush(color);
+			HBRUSH hBrush = CreateSolidBrush(fill_color);
 			SelectObject(hdc, hPen);
 			SelectObject(hdc,hPen_complimentary);
 			SelectObject(hdc, hBrush);
@@ -453,7 +454,7 @@ namespace Geometry
 			HDC hdc = GetDC(hwnd);
 			HPEN hPen = CreatePen(PS_SOLID, line_width, color);
 			HPEN hPen_complimentary = CreatePen(PS_SOLID, 5, complimentary(color));
-			HBRUSH hBrush = CreateSolidBrush(color);
+			HBRUSH hBrush = CreateSolidBrush(fill_color);
 			SelectObject(hdc, hPen);
 			SelectObject(hdc, hPen_complimentary);
 			SelectObject(hdc, hBrush);
@@ -479,19 +480,27 @@ namespace Geometry
 void main()
 {
 	setlocale(LC_ALL, "");
-	//Geometry::Square square(100, 280, 200, 1, Geometry::Color::Green);
-	//square.info();
+	Geometry::Square square(250, -300, -300, 1, Geometry::Color::Green);
+	square.info();
 
-	//Geometry::Rectangle rect(200, 1000, 100, 300, 5, Geometry::Color::Violet);
-	//rect.info();
+	Geometry::Rectangle rect(200, 100, 400, 100, 5, Geometry::Color::Orange);
+	rect.info();
 
-	//Geometry::Circle circle(50, 700, 300, 5, Geometry::Color::White);
-	//circle.info();
+	Geometry::Circle circle(150, 700, 300, 5, Geometry::Color::Violet);
+	circle.info();
 
-	//Geometry::EquilateralTriangle e_triangle(180, 500, 200, 32, Geometry::Color::Yellow);
-	//e_triangle.info();
+	Geometry::EquilateralTriangle e_triangle(180, 500, 250, 32, Geometry::Color::Yellow);
+	e_triangle.info();
 
-	//Geometry::IsoscelesTriangle iso_triangle(300, 180, 400, 400, 32, Geometry::Color::Violet);
-	//iso_triangle.info();
+	Geometry::IsoscelesTriangle iso_triangle(100, 50, 850, 500, 32, Geometry::Color::Violet);
+	iso_triangle.info();
 	
+	while (true)
+	{
+		square.draw();
+		rect.draw();
+		circle.draw();
+		iso_triangle.draw();
+		e_triangle.draw();
+	}
 }
